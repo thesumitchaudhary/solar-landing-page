@@ -166,10 +166,10 @@ function App() {
             <button
               type="button"
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              className="p-2 rounded-md border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-slate-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+              className="px-3 py-1 rounded-md border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-sm"
               aria-label="Toggle theme"
             >
-              {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              {theme === 'dark' ? <Sun /> : <Moon />}
             </button>
 
             {/* mobile menu button */}
