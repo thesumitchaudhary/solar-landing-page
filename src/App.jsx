@@ -1,7 +1,8 @@
-import React, {useLayoutEffect, useRef, useState, useEffect} from "react";
-import {gsap} from "gsap";
-import {ScrollTrigger} from "gsap/ScrollTrigger";
+import React, { useLayoutEffect, useRef, useState, useEffect } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import "./App.css";
+import { Sun, Moon } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -11,125 +12,98 @@ function App() {
   const cardsRef = useRef([]);
   const statRef = useRef([]);
   const brandsRef = useRef([]);
-  const videoContainerRef = useRef(null);
-  const videoRef = useRef(null);
   const [theme, setTheme] = useState(() =>
-      typeof window !== 'undefined' ? localStorage.getItem('theme') || 'light' : 'light'
+    typeof window !== 'undefined' ? localStorage.getItem('theme') || 'light' : 'light'
   );
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
     const root = document.documentElement;
-      if (theme === 'dark') {
-        root.classList.add('dark');
+    if (theme === 'dark') {
+      root.classList.add('dark');
     } else {
-        root.classList.remove('dark');
+      root.classList.remove('dark');
     }
-      try {
-        localStorage.setItem('theme', theme);
+    try {
+      localStorage.setItem('theme', theme);
     } catch (e) {
-        // ignore
-      }
+      // ignore
+    }
   }, [theme]);
 
   useLayoutEffect(() => {
-    const mm = gsap.matchMedia();
-    const ctx = gsap.context(() => {
-        mm.add("(prefers-reduced-motion: no-preference)", () => {
-          const heroItems = heroRef.current?.querySelectorAll(".animate-hero");
-          if (heroItems?.length) {
-            gsap.from(heroItems, {
-              y: 48,
-              autoAlpha: 0,
-              duration: 0.8,
-              stagger: 0.16,
-              ease: "power3.out",
-            });
-          }
-
-          cardsRef.current.forEach((card, index) => {
-            if (!card) return;
-            gsap.from(card, {
-              y: 40,
-              autoAlpha: 0,
-              duration: 0.7,
-              ease: "power2.out",
-              delay: index * 0.04,
-              scrollTrigger: {
-                trigger: card,
-                start: "top 88%",
-              },
-            });
-          });
-
-          statRef.current.forEach((item) => {
-            if (!item) return;
-            gsap.from(item, {
-              scale: 0.82,
-              autoAlpha: 0,
-              duration: 0.62,
-              ease: "back.out(1.5)",
-              scrollTrigger: {
-                trigger: item,
-                start: "top 90%",
-              },
-            });
-          });
-
-          gsap.from(".cta-panel", {
-            y: 54,
-            autoAlpha: 0,
-            duration: 0.8,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: ".cta-panel",
-              start: "top 82%",
-            },
-          });
-
-          // Video scrub animation
-          const video = videoRef.current;
-          if (video && videoContainerRef.current) {
-            const setupScroll = () => {
-              gsap.to(video, {
-                currentTime: video.duration || 1,
-                ease: "none",
-                scrollTrigger: {
-                  trigger: videoContainerRef.current,
-                  start: "top top",
-                  end: "+=1000",
-                  scrub: true,
-                  pin: true,
-                }
-              });
-            };
-            if (video.readyState >= 1) {
-              setupScroll();
-            } else {
-              video.addEventListener('loadedmetadata', setupScroll);
-            }
-          }
-
-          brandsRef.current.forEach((card, index) => {
-            if (!card) return;
-            gsap.from(card, {
-              y: 30,
-              autoAlpha: 0,
-              duration: 0.6,
-              ease: "power2.out",
-              delay: index * 0.1,
-              scrollTrigger: {
-                trigger: card,
-                start: "top 85%",
-              },
-            });
-          });
+    const mm = gsap.matchMedia(pageRef);
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
+      const heroItems = heroRef.current?.querySelectorAll(".animate-hero");
+      if (heroItems?.length) {
+        gsap.from(heroItems, {
+          y: 48,
+          autoAlpha: 0,
+          duration: 0.8,
+          stagger: 0.16,
+          ease: "power3.out",
         });
-    }, pageRef);
+      }
+
+      cardsRef.current.forEach((card, index) => {
+        if (!card) return;
+        gsap.from(card, {
+          y: 40,
+          autoAlpha: 0,
+          duration: 0.7,
+          ease: "power2.out",
+          delay: index * 0.04,
+          scrollTrigger: {
+            trigger: card,
+            start: "top 88%",
+          },
+        });
+      });
+
+      statRef.current.forEach((item) => {
+        if (!item) return;
+        gsap.from(item, {
+          scale: 0.82,
+          autoAlpha: 0,
+          duration: 0.62,
+          ease: "back.out(1.5)",
+          scrollTrigger: {
+            trigger: item,
+            start: "top 90%",
+          },
+        });
+      });
+
+      gsap.from(".cta-panel", {
+        y: 54,
+        autoAlpha: 0,
+        duration: 0.8,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: ".cta-panel",
+          start: "top 82%",
+        },
+      });
+
+
+      brandsRef.current.forEach((card, index) => {
+        if (!card) return;
+        gsap.from(card, {
+          y: 30,
+          autoAlpha: 0,
+          duration: 0.6,
+          ease: "power2.out",
+          delay: index * 0.1,
+          scrollTrigger: {
+            trigger: card,
+            start: "top 85%",
+          },
+        });
+      });
+    });
 
     return () => {
-        mm.revert();
-      ctx.revert();
+      mm.revert();
     };
   }, []);
 
@@ -159,9 +133,9 @@ function App() {
   ];
 
   const stats = [
-    {value: "40%", label: "Average bill reduction" },
-    {value: "25yr", label: "Panel performance warranty" },
-    {value: "3.2M", label: "kWh generated by clients" },
+    { value: "40%", label: "Average bill reduction" },
+    { value: "25yr", label: "Panel performance warranty" },
+    { value: "3.2M", label: "kWh generated by clients" },
   ];
 
   const brandCosts = [
@@ -192,10 +166,10 @@ function App() {
             <button
               type="button"
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              className="px-3 py-1 rounded-md border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-sm"
+              className="p-2 rounded-md border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-slate-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
               aria-label="Toggle theme"
             >
-              {theme === 'dark' ? 'Light' : 'Dark'}
+              {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
 
             {/* mobile menu button */}
@@ -291,27 +265,6 @@ function App() {
             </div>
           ))}
         </div>
-      </section>
-
-      {/* Video Scrubbing Section */}
-      <section
-        ref={videoContainerRef}
-        className="relative w-full h-[60vh] md:h-[70vh] bg-black overflow-hidden flex items-center justify-center"
-      >
-        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-white p-6 bg-black/40 pointer-events-none">
-          <h2 className="text-4xl md:text-6xl font-bold mb-4 text-center">Precision Installation</h2>
-          <p className="text-lg md:text-xl text-center max-w-2xl">
-            Watch our certified crews install a complete system with zero compromise on aesthetics or roof integrity.
-          </p>
-        </div>
-        <video
-          ref={videoRef}
-          className="w-full h-full object-cover opacity-70"
-          src="https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
-          playsInline
-          muted
-          preload="metadata"
-        />
       </section>
 
       <section id="pricing" className="max-w-7xl mx-auto px-6 py-16">
